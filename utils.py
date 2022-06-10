@@ -208,19 +208,23 @@ def constructBitMap(maze:Maze)->list:
 
 # Function render
 
-## Function render maze in 3D
+## Function render maze in 3D using DDA
 def print3DMaze(bitmap:list,coord:tuple,orientation:str)->None:
 
     plane = getPlanaire(orientation)
     lsRay = []
 
+    # For all ray
     for i in range(MAX_RAY):
+
+        # Calcul direction of ray
         cam = ( 2 * i ) / MAX_RAY - 1
         directionVector = dirConvert(orientation)
         rayDir = [ directionVector[0] + plane[0] * cam , directionVector[1] + plane[1] * cam ]
 
         mapCoord = [ int(coord[0]) , int(coord[1]) ]
         deltaDist = [ 0,0 ]
+
 
         if ( rayDir[0] == 0 ) :
             deltaDist[0] = float('inf')
@@ -232,12 +236,14 @@ def print3DMaze(bitmap:list,coord:tuple,orientation:str)->None:
         else:
             deltaDist[1] = abs( 1 / rayDir[1] )
 
+        # Create variables
         sideDist = [ 0,0 ]
         step = [ 0,0 ]
 
         hit = False
         side = False
 
+        # Change sideStep and step with delta
         if ( rayDir[0] < 0 ):
             step[0] = -1
             sideDist[0] = ( coord[0] - mapCoord[0] ) * deltaDist[0]
@@ -252,6 +258,7 @@ def print3DMaze(bitmap:list,coord:tuple,orientation:str)->None:
             step[1] = 1
             sideDist[1] = ( -coord[1] + mapCoord[1] + 1 ) * deltaDist[1]
 
+        # While not touch, go forward
         while ( not hit ):
 
             if ( sideDist[0] < sideDist[1] ):
